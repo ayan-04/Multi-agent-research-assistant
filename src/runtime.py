@@ -1,4 +1,4 @@
-"""Wire the real Gemini, DuckDuckGo, fetch, and Chroma objects for the CLI."""
+"""Wire the real Gemini, DuckDuckGo, fetch, and PostgreSQL objects for the CLI."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from src.cache import DiskCache
 from src.config import Settings
 from src.llm.client import GeminiBackend, LLMClient
 from src.rag.embeddings import build_embedder
-from src.rag.store import ChromaStore
+from src.rag.store import PostgresStore
 from src.tools.fetch import HttpxFetcher
 from src.tools.search import DuckDuckGoSearch
 
@@ -22,7 +22,7 @@ class Runtime:
     llm: LLMClient
     search: DuckDuckGoSearch
     fetch: HttpxFetcher
-    store: ChromaStore
+    store: PostgresStore
 
 
 def build_runtime(settings: Settings) -> Runtime:
@@ -43,9 +43,9 @@ def build_runtime(settings: Settings) -> Runtime:
         budget=budget,
     )
     # A new collection per process so this run does not retrieve another topic's pages.
-    store = ChromaStore(
+    store = PostgresStore(
         embedder=build_embedder(settings, budget=budget),
-        persist_dir=settings.chroma_dir,
+        database_url=settings.database_url,
         collection_name=f"run_{uuid.uuid4().hex[:12]}",
     )
     return Runtime(

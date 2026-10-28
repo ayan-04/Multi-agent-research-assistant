@@ -12,7 +12,7 @@ from src.errors import TransientLLMError
 from src.llm.client import LLMClient
 from src.llm.schemas import ResearchPlan, ResearchRun
 from src.rag.embeddings import HashingEmbedder
-from src.rag.store import ChromaStore
+from src.rag.store import MemoryStore
 from src.tools.fetch import FetchResult
 from src.tools.search import SearchHit
 
@@ -99,11 +99,9 @@ def make_llm(settings: Settings, backend, budget: Budget | None = None, sleeper=
     )
 
 
-def make_store() -> ChromaStore:
-    # EphemeralClient shares one process-wide database, so each test needs its own collection.
-    return ChromaStore(
+def make_store() -> MemoryStore:
+    return MemoryStore(
         embedder=HashingEmbedder(),
-        persist_dir=None,
         collection_name=f"t_{uuid.uuid4().hex[:16]}",
     )
 

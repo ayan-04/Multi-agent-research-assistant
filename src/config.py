@@ -32,7 +32,7 @@ class Settings(BaseModel):
     search_results_per_query: int = 2
     max_subquestions: int = 3
     cache_dir: str = "data/cache"
-    chroma_dir: str = "data/chroma"
+    database_url: str = ""
     temperature: float = 0.2
 
     def trimmed(self) -> Settings:
@@ -98,6 +98,6 @@ def load_settings(env_file: str | Path | None = ".env") -> Settings:
         ),
         max_subquestions=_int_env("MAX_SUBQUESTIONS", defaults.max_subquestions),
         cache_dir=os.getenv("CACHE_DIR", defaults.cache_dir),
-        chroma_dir=os.getenv("CHROMA_DIR", defaults.chroma_dir),
+        database_url=os.getenv("DATABASE_URL", defaults.database_url),
         temperature=_float_env("GEMINI_TEMPERATURE", defaults.temperature),
     ).trimmed()

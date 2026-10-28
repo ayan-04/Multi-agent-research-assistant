@@ -2,11 +2,11 @@ import uuid
 
 from src.rag.embeddings import HashingEmbedder
 from src.rag.retrieve import retrieve_for_report
-from src.rag.store import ChromaStore
+from src.rag.store import MemoryStore
 
 
-def _store(name: str) -> ChromaStore:
-    return ChromaStore(HashingEmbedder(), collection_name=f"{name}_{uuid.uuid4().hex[:8]}")
+def _store(name: str) -> MemoryStore:
+    return MemoryStore(HashingEmbedder(), collection_name=f"{name}_{uuid.uuid4().hex[:8]}")
 
 
 def test_chunks_keep_source_metadata_and_can_be_retrieved():

@@ -1,1 +1,1 @@
-"""Chunking, embeddings, Chroma storage, and retrieval."""
+"""Chunking, embeddings, PostgreSQL storage, and retrieval."""
